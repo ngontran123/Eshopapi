@@ -7,6 +7,7 @@ using Data;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Models;
+using System.Text.Json;
 using DTO;
 using Helpers;
 using Filter;
@@ -15,6 +16,7 @@ namespace Controllers
 {
 [Route("api/[controller]")]
     [ApiController]
+     [CamelCaseControllerConfig]
  public class ProductsController : ControllerBase
  {
      private readonly EcommerContext _context;
@@ -24,19 +26,29 @@ namespace Controllers
          _context=context;
          this._uriservice=uriservice;
      }
+      [CamelCaseControllerConfig]
      [HttpGet]
-     public async Task<IActionResult> GetProduct([FromQuery]PagedFilter filter)
+     public async Task<IActionResult> GetProduct([FromQuery]PagedFilter filter,[FromQuery]int brandid,[FromQuery]int categoryid,[FromQuery]String status)
      {  
         var resfilter=new PagedFilter(filter.pagenumber,filter.pagesize);
         var data= await _context.product.Select(p=>p.toproductdto()).Skip((resfilter.pagenumber-1)*resfilter.pagesize).Take(resfilter.pagesize)
         .ToListAsync();
+        var data1=await _context.product.Where(p=>p.brandId==brandid&&p.categoryId==categoryid&&p.status==status).Select(p=>p.toproductdto()).ToListAsync();
+        if(brandid!=null&&categoryid!=null&&status!=null)
+        {
+            return Ok(data1);
+        }
+
+        else{
         var route=Request.Path.Value;
          var totalcount=await _context.product.Select(p=>p.toproductdto()).CountAsync();
          var pagedesponse=Pagedresponse.createpagedresponse<ProductDTO>(data,filter,totalcount,_uriservice,route);
          return Ok(pagedesponse);
-     }
+        }
+        }
+      [CamelCaseControllerConfig]
      [HttpGet("{id}")]
-     public async Task<ActionResult<ProductDTO>> GetProduct(int id)
+       public async Task<ActionResult<ProductDTO>> GetProduct(int id)
      {
       var p1=await _context.product.FindAsync(id);
       if(p1==null)
@@ -46,6 +58,7 @@ namespace Controllers
       }
       return Ok(new Response<ProductDTO>(p1.toproductdto()));
      }
+
      [HttpPost]
      public async Task<ActionResult<ProductDTO>> CreateProduct(ProductDTO p2)
      {

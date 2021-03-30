@@ -10,7 +10,7 @@ namespace Models{
         [RegularExpression(@"^[A-Z]+[a-zA-Z0-9""'\s-]*$")]
         public string seller_sku {get;set;}
         [Required]
-        public int productid{get;set;}
+        public int productId{get;set;}
         public int available {get;set;}
         public int quantity {get;set;}
         public string color{get;set;}

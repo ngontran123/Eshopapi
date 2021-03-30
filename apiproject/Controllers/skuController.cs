@@ -15,6 +15,7 @@ namespace Controllers
 {
 [Route("api/[controller]")]
     [ApiController]
+    [CamelCaseControllerConfig]
  public class skuController : ControllerBase
  {
      private readonly EcommerContext _context;
@@ -25,6 +26,7 @@ namespace Controllers
          this._uriservice=uriservice;
      }
      [HttpGet]
+     [CamelCaseControllerConfig]
      public async Task<IActionResult> GetSkus([FromQuery]PagedFilter filter)
      {  
         var resfilter=new PagedFilter(filter.pagenumber,filter.pagesize);
@@ -36,6 +38,7 @@ namespace Controllers
          return Ok(pagedesponse);
      }
      [HttpGet("{id}")]
+     [CamelCaseControllerConfig]
      public async Task<ActionResult<SkuDTO>> Getsku(int id)
      {
       var sku1=await _context.skus.FindAsync(id);

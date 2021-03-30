@@ -25,7 +25,7 @@ namespace Controllers
         return await _context.customers.Select(p=>p.tocustomerDTO()).ToListAsync();
      }
      [HttpGet("{id}")]
-     public async Task<ActionResult<customerDTO>> Getsku(int id)
+     public async Task<ActionResult<customerDTO>> Getcustomer(int id)
      {
       var cus1=await _context.customers.FindAsync(id);
       if(cus1==null)
@@ -34,8 +34,9 @@ namespace Controllers
       }
       return cus1.tocustomerDTO();
      }
+    
      [HttpPost]
-     public async Task<ActionResult<customerDTO>> CreateProduct(customerDTO cus2)
+     public async Task<ActionResult<customerDTO>> Createcustomer(customerDTO cus2)
      {
          var cus1=cus2.tocustomer();
          _context.customers.Add(cus1);
@@ -43,7 +44,7 @@ namespace Controllers
          return CreatedAtAction(nameof(Getcustomer),new {id=cus1.id},cus1);
      }
      [HttpPut]
-     public async Task<IActionResult> Updateproduct(customerDTO cus2)
+     public async Task<IActionResult> Updatecustomer(customerDTO cus2)
      {
          var cus1=await _context.customers.FindAsync(cus2.id);
          if(cus1==null)

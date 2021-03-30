@@ -7,9 +7,9 @@ namespace Models
     [Key]
            public int id{get;set;}
        [Required]
-        public int orderid{get;set;}
+        public int orderTableId{get;set;}
         [Required]
-        public int skuid{get;set;}
+        public int skuId{get;set;}
         [StringLength(60,MinimumLength=10)]
         public string name{get;set;}
         public string variation{get;set;}

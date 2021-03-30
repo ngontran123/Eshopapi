@@ -11,7 +11,10 @@ using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Sqlite;
 using Microsoft.EntityFrameworkCore.SqlServer;
+using System.Text;
+using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json.Serialization;
 using Data;
 using Baseurl;
 namespace apiproject
@@ -29,8 +32,9 @@ namespace apiproject
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {   services.AddDbContext<EcommerContext>(options=>options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddControllers();
-            services.AddMvc();
+              services.AddControllers()
+        .AddNewtonsoftJson(options => 
+        options.SerializerSettings.ContractResolver=new CamelCasePropertyNamesContractResolver());
             services.AddHttpContextAccessor();
             services.AddSingleton<IrulService>(o=>
             {

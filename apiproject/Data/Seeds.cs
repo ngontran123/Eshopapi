@@ -36,9 +36,9 @@ namespace Data{
                 {  new Products
                 {
                     id=1,
-                    categoryid=1,
-                    brandid=1,
-                    productname="New phone",
+                    categoryId=1,
+                    brandId=1,
+                    productName="New phone",
                     description="newest product",
                     status="yes",
                     Category=Categories["hello long tran"]
@@ -47,9 +47,9 @@ namespace Data{
                  new Products
                 {
                     id=2,
-                    categoryid=1,
-                    brandid=2,
-                    productname="New phone1",
+                    categoryId=1,
+                    brandId=2,
+                    productName="New phone1",
                     description="newest product1",
                     status="yes",
                     Category=Categories["hello long tran"]
@@ -75,7 +75,7 @@ namespace Data{
                        length=200,
                        weight=30,
                        price=35M,
-                       productid=2
+                       productId=2
                        
 
                   },
@@ -91,7 +91,7 @@ namespace Data{
                        length=200,
                        weight=30,
                        price=20M,
-                       productid=1
+                       productId=1
                     
 
                   }

@@ -6,14 +6,16 @@ namespace Models{
     [Key]
         public int id{get;set;}
         public string name{get;set;}
+        [EmailAddress]
         public string email{get;set;}
-        public string phonenumber{get;set;}
+        public string phoneNumber{get;set;}
         public string gender{get;set;}
+         [StringLength(10, MinimumLength = 5)]
         public string password{get;set;}
-        public string accesstoken{get;set;}
-        public string accesexpire {get;set;}
-        public string refreshtoken{get;set;}
-        public string refreshexpire{get;set;}
+        public string accessToken{get;set;}
+        public string accesExpire {get;set;}
+        public string refreshToken{get;set;}
+        public string refreshExpire{get;set;}
 
     }
 }
