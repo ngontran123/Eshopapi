@@ -6,7 +6,9 @@ using Microsoft.EntityFrameworkCore;
 using Data;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 using Models;
+using Microsoft.AspNetCore.Authorization;
 using System.Text.Json;
 using DTO;
 using Helpers;
@@ -20,8 +22,8 @@ namespace Controllers
  public class ProductsController : ControllerBase
  {
      private readonly EcommerContext _context;
-     private readonly IrulService _uriservice;
-     public ProductsController(EcommerContext context,IrulService uriservice)
+     private readonly IrulService _uriservice; 
+          public ProductsController(EcommerContext context,IrulService uriservice)
      {
          _context=context;
          this._uriservice=uriservice;
@@ -34,7 +36,7 @@ namespace Controllers
         var data= await _context.product.Select(p=>p.toproductdto()).Skip((resfilter.pagenumber-1)*resfilter.pagesize).Take(resfilter.pagesize)
         .ToListAsync();
         var data1=await _context.product.Where(p=>p.brandId==brandid&&p.categoryId==categoryid&&p.status==status).Select(p=>p.toproductdto()).ToListAsync();
-        if(brandid!=null&&categoryid!=null&&status!=null)
+        if(brandid!=' '&&categoryid!=' '&&status!=null)
         {
             return Ok(data1);
         }

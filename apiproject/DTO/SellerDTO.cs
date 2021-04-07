@@ -11,8 +11,7 @@ namespace Models{
         public String password{get;set;}
         public String secretKey{get;set;}
         public String accessToken{get;set;}
-        public String accessExpire{get;set;}
+        public DateTime accessExpire{get;set;}
         public String refreshToken{get;set;}
-        public String refreshExpire{get;set;}
     }
 }

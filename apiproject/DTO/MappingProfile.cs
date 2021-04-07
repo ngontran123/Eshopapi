@@ -7,11 +7,12 @@ namespace DTO{
     public static class MappingProfile
     {
        public static SkuDTO toskuDTO(this sku sku1)
-       {return new SkuDTO()
+       {  
+         return new SkuDTO()
        {
          id=sku1.id,
         seller_sku=sku1.seller_sku,
-         available=sku1.available,
+        available=sku1.available,
          quantity=sku1.quantity,
         color=sku1.color,
          size=sku1.size,
@@ -19,14 +20,17 @@ namespace DTO{
        width=sku1.width,
         length=sku1.length,
          weight=sku1.weight,
-         price=sku1.price
+         price=sku1.price,
+         productId=sku1.productId
+        
        };
+       
        }
        public static sku tosku(this SkuDTO sku2)
        {
            return new sku()
            {
-                
+       id=sku2.id,
         seller_sku=sku2.seller_sku,
          available=sku2.available,
          quantity=sku2.quantity,
@@ -36,8 +40,9 @@ namespace DTO{
        width=sku2.width,
         length=sku2.length,
          weight=sku2.weight,
-         price=sku2.price
-           };
+         price=sku2.price,
+         productId=sku2.productId
+       };
        }
        public static void Mapto(this sku sku1,SkuDTO sku2)
        {
@@ -47,37 +52,39 @@ namespace DTO{
          sku1.quantity=sku2.quantity;
         sku1.color=sku2.color;
          sku1.size=sku2.size;
-        sku1.heigth=sku2.heigth;
+         sku1.heigth=sku2.heigth;
        sku1.width=sku2.width;
         sku1.length=sku2.length;
-         sku1.weight=sku2.weight;
-         sku1.price=sku2.price;
-       }
-           public static order_itemDTO toorder_itemDTO(this order_item ori)
-       {
-           return new order_itemDTO()
+        sku1.weight=sku2.weight;
+        sku1.price=sku2.price;
+        sku1.productId=sku2.productId;
+      
+           }
+           public static order_itemDTO toorder_itemDTO(this order_item ori1)
            {
-                 id=ori.id,
-         orderTableId=ori.orderTableId,
-         skuId=ori.skuId,
-         name=ori.name,
-        variation=ori.variation,
-         price=ori.price,
-         quantity=ori.quantity
-           };
-       }
-       public static order_item toorder_item(this order_itemDTO ori1)
-       {
-           return new order_item()
-           {
-                 id=ori1.id,
+             return new order_itemDTO()
+             {
+                id=ori1.id,
          orderTableId=ori1.orderTableId,
          skuId=ori1.skuId,
          name=ori1.name,
         variation=ori1.variation,
          price=ori1.price,
          quantity=ori1.quantity
-           };
+             };
+           } 
+       public static order_item toorder_item(this order_itemDTO ori1)
+       {
+         return new order_item()
+         {    id=ori1.id,
+         orderTableId=ori1.orderTableId,
+         skuId=ori1.skuId,
+         name=ori1.name,
+        variation=ori1.variation,
+         price=ori1.price,
+         quantity=ori1.quantity
+
+         };
        }
        public static void Mapto1(this order_item ori,order_itemDTO ori1)
        {
@@ -159,12 +166,10 @@ namespace DTO{
         name=c.name,
          email=c.email,
          phoneNumber=c.phoneNumber,
-         gender=c.gender,
          password=c.password,
         accessToken=c.accessToken,
          accesExpire=c.accesExpire,
-       refreshToken=c.refreshToken,
-         refreshExpire=c.refreshExpire
+       refreshToken=c.refreshToken
       };
     }
     public static customer tocustomer(this customerDTO c1)
@@ -174,12 +179,11 @@ namespace DTO{
         name=c1.name,
          email=c1.email,
          phoneNumber=c1.phoneNumber,
-         gender=c1.gender,
+  
          password=c1.password,
         accessToken=c1.accessToken,
          accesExpire=c1.accesExpire,
-       refreshToken=c1.refreshToken,
-         refreshExpire=c1.refreshExpire
+       refreshToken=c1.refreshToken
     };  
     }
     public static void Mapto4(this customer c,customerDTO c1)
@@ -188,12 +192,12 @@ namespace DTO{
         c.name=c1.name;
          c.email=c1.email;
          c.phoneNumber=c1.phoneNumber;
-         c.gender=c1.gender;
+       
          c.password=c1.password;
         c.accessToken=c1.accessToken;
          c.accesExpire=c1.accesExpire;
        c.refreshToken=c1.refreshToken;
-         c.refreshExpire=c1.refreshExpire;
+       
     }
   public static brand toBrand(this brandDTO b)
   { return new brand()
@@ -314,8 +318,7 @@ public static AddressDTO toaddressdto(this Address ad)
       secretKey=s.secretKey,
       accessToken=s.accessToken,
       accessExpire=s.accessExpire,
-      refreshToken=s.refreshToken,
-      refreshExpire=s.refreshExpire
+      refreshToken=s.refreshToken
     };
   }
   public static Seller toseller(this SellerDTO s1)
@@ -330,8 +333,7 @@ public static AddressDTO toaddressdto(this Address ad)
       secretKey=s1.secretKey,
       accessToken=s1.accessToken,
       accessExpire=s1.accessExpire,
-      refreshToken=s1.refreshToken,
-      refreshExpire=s1.refreshExpire
+      refreshToken=s1.refreshToken
     };
   }
   public static void Mapto9(this Seller s,SellerDTO s1)
@@ -345,7 +347,6 @@ public static AddressDTO toaddressdto(this Address ad)
       s.accessToken=s1.accessToken;
       s.accessExpire=s1.accessExpire;
       s.refreshToken=s1.refreshToken;
-      s.refreshExpire=s1.refreshExpire;
   }
   public static SelleraddressDTO toselleraddressdto(this Selleraddress s)
   {

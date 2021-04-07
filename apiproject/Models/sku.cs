@@ -12,7 +12,7 @@ namespace Models{
         [Required]
         public int productId{get;set;}
         public int available {get;set;}
-        public int quantity {get;set;}
+        public int quantity {get;set;} 
         public string color{get;set;}
         public int size{get;set;}
         public int heigth{get;set;}
@@ -22,5 +22,6 @@ namespace Models{
         [RegularExpression(@"\D+")]
         public decimal price{get;set;}
         public virtual Products product{get;set;}
+        public virtual images Images{get;set;}
     }
 }

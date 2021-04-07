@@ -13,11 +13,8 @@ namespace Models{
         public int brandId{get;set;}
         public String productName{get;set;}
         public String description{get;set;}
-
-
         public String status{get;set;}
         public virtual brand Brand{get;set;}
         public virtual Category Category{get;set;}
-
     }
 }

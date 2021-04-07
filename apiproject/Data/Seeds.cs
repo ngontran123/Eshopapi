@@ -76,24 +76,19 @@ namespace Data{
                        weight=30,
                        price=35M,
                        productId=2
-                       
-
                   },
-                  new sku{
-                      
+                  new sku{      
                       seller_sku="Nguyen van B",
                       available=1,
                       quantity=100,
                       color="Xanh",
-                       size=15,
-                       heigth=20,
-                       width=20*15,
+                      size=15,
+                      heigth=20,
+                      width=20*15,
                        length=200,
                        weight=30,
                        price=20M,
                        productId=1
-                    
-
                   }
                 }
                 

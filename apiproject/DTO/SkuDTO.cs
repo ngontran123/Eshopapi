@@ -15,5 +15,6 @@ public class SkuDTO
         public int length{get;set;}
         public int weight{get;set;}
         public decimal price{get;set;}
+        public int productId{get;set;}
 }
 }
