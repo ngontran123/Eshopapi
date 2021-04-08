@@ -173,7 +173,14 @@ namespace Controllers
                return StatusCode(StatusCodes.Status500InternalServerError, new Response { status = "Lỗi", message = "Qúa trình đăng ký user đã xảy ra lỗi."});
      
            }
-
+             if(! await roleManager.RoleExistsAsync(UserRole.customer))
+           {
+               await roleManager.CreateAsync(new IdentityRole(UserRole.customer));
+           }
+                 if(await roleManager.RoleExistsAsync(UserRole.customer))
+           {
+               await userManager.AddToRoleAsync(user,UserRole.customer);
+           }
  
            return Ok(new Response{status="ok",message="Tài khoản được tạo thành công."});
    }
