@@ -67,38 +67,8 @@ namespace Controllers
         var token1 = new JwtSecurityTokenHandler().WriteToken(token);
         var expire = token.ValidTo;
         var userrole1 = await userManager.IsInRoleAsync(user, "customer");
-        // if(userrole1)
-        // {
-
-
-        // var cus=new customer()
-        // {
-        //     phoneNumber=user.UserName,
-        //     password=user.PasswordHash,
-        //     name=user.PhoneNumber,
-        //     email=user.Email,
-        //     accessToken=token1,
-        //     accesExpire=expire,
-        //     refreshToken=refreshObject.refreshToken
-
-        // };
-        // await _ecommerContext.customers.AddAsync(cus);
-        // await _ecommerContext.SaveChangesAsync();
-        // }
-        // else{
-        //     var sel=new Seller()
-        //     {
-        //         name=user.PhoneNumber,
-        //         password=user.PasswordHash,
-        //         phoneNumer=user.UserName,
-        //         email=user.Email,
-        //         accessToken=token1,
-        //         accessExpire=expire,
-        //         refreshToken=refreshObject.refreshToken
-        //     };
-        //     await _ecommerContext.seller.AddAsync(sel);
-        //     await _ecommerContext.SaveChangesAsync();
-        // }
+       
+       
         return Ok(new
         {
           token = new JwtSecurityTokenHandler().WriteToken(token),
@@ -182,6 +152,19 @@ namespace Controllers
       {
         await userManager.AddToRoleAsync(user, UserRole.customer);
       }
+      
+         var cus=new customer()
+         {
+             phoneNumber=user.UserName,
+             password=user.PasswordHash,
+             name=user.PhoneNumber,
+             email=user.Email,
+             accessToken=null,
+             refreshToken=null
+
+         };
+         await _ecommerContext.customers.AddAsync(cus);
+         await _ecommerContext.SaveChangesAsync();
 
       return Ok(new Response { status = "ok", message = "Tài khoản được tạo thành công." });
     }
@@ -223,6 +206,17 @@ namespace Controllers
         {
           await userManager.AddToRoleAsync(user, UserRole.seller);
         }
+          var sel=new Seller()
+            {
+                 name=user.PhoneNumber,
+                 password=user.PasswordHash,
+                phoneNumer=user.UserName,
+                 email=user.Email,
+                 accessToken=null,
+                 refreshToken=null
+             };
+            await _ecommerContext.seller.AddAsync(sel);
+             await _ecommerContext.SaveChangesAsync();
         return Ok(new Response { status = "Ok", message = "Đã đăng ký thành công tài khoản seller." });
       }
     }
