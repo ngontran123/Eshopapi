@@ -16,11 +16,11 @@ namespace Controllers
 [Route("api/[controller]")]
     [ApiController]
     [CamelCaseControllerConfig]
- public class skuController : ControllerBase
+ public class SkusController : ControllerBase
  {
      private readonly EcommerContext _context;
      private readonly IrulService _uriservice;
-     public skuController(EcommerContext context,IrulService uriservice)
+     public SkusController(EcommerContext context,IrulService uriservice)
      {
          _context=context;
          this._uriservice=uriservice;

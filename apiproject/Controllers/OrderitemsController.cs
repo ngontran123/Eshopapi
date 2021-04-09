@@ -14,12 +14,12 @@ using Helpers;
 namespace Controllers
 {
 [Route("api/[controller]")]
-    [ApiController]
- public class orderitemController : ControllerBase
+  [ApiController]
+ public class OrderitemsController : ControllerBase
  {
      private readonly EcommerContext _context;
      private readonly IrulService _urlservice;
-     public orderitemController(EcommerContext context,IrulService urlservice)
+     public OrderitemsController(EcommerContext context,IrulService urlservice)
      {
          _context=context;
          _urlservice=urlservice;

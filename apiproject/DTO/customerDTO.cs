@@ -10,5 +10,7 @@ namespace DTO{
         public string accessToken{get;set;}
         public DateTime accesExpire {get;set;}
         public string refreshToken{get;set;}
+
+        public string gender{get;set;}
     }
 }

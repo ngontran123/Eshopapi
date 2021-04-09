@@ -11,6 +11,7 @@ namespace DTO{
         public string shippingAddress{get;set;}
         public decimal totalPrice {get;set;}
         public string status{get;set;}
-        
+
+        public int customerId{get;set;} 
     }
 }

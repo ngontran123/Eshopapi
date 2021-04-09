@@ -14,6 +14,7 @@ namespace Models{
         public string name{get;set;}
         [EmailAddress]
         public string email{get;set;}
+
         public string phoneNumber{get;set;}
         [Compare("Password")]
          [StringLength(20, MinimumLength = 8)]
@@ -22,6 +23,6 @@ namespace Models{
         public string accessToken{get;set;}
         public DateTime accesExpire {get;set;}
         public string refreshToken{get;set;}
-
+        public string gender{get;set;}
     }
 }

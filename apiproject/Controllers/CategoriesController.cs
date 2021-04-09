@@ -12,10 +12,10 @@ namespace Controllers
 {
 [Route("api/[controller]")]
     [ApiController]
- public class CategoryController : ControllerBase
+ public class CategoriesController : ControllerBase
  {
      private readonly EcommerContext _context;
-     public CategoryController(EcommerContext context)
+     public CategoriesController(EcommerContext context)
      {
          _context=context;
      }

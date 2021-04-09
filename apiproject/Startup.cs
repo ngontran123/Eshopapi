@@ -26,6 +26,7 @@ namespace apiproject
 {
     public class Startup
     {    
+        readonly string AllowSpecificOrigins = "tiktzukiSpecific";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -37,6 +38,13 @@ namespace apiproject
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {   services.AddDbContext<EcommerContext>(options=>options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddCors(options => {
+                options.AddPolicy(name: AllowSpecificOrigins,
+                builder =>
+                {
+                    builder.WithOrigins().AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
+                });
+            });
               services.AddControllers()
         .AddNewtonsoftJson();
             services.AddHttpContextAccessor();
@@ -85,6 +93,7 @@ namespace apiproject
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            app.UseCors(AllowSpecificOrigins);
             app.UseAuthentication();
 
             app.UseAuthorization();

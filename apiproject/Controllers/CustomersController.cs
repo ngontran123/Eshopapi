@@ -8,23 +8,30 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using DTO;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
+
 namespace Controllers
 {
 [Route("api/[controller]")]
     [ApiController]
- public class customerController : ControllerBase
+ public class CustomersController : ControllerBase
  {
      private readonly EcommerContext _context;
-     public customerController(EcommerContext context)
+     public CustomersController(EcommerContext context)
      {
          _context=context;
      }
      [HttpGet]
-     public async Task<IEnumerable<customerDTO>> Getcustomer()
-     {
-        return await _context.customers.Select(p=>p.tocustomerDTO()).ToListAsync();
-     }
-     [HttpGet("{id}")]
+    public async Task<IEnumerable<customerDTO>> Getcustomer(string phoneNumber)
+    {
+      return await _context.customers
+      .Select(p => p.tocustomerDTO()).ToListAsync();
+    }
+     
+    [HttpGet("{id}")]
      public async Task<ActionResult<customerDTO>> Getcustomer(int id)
      {
       var cus1=await _context.customers.FindAsync(id);
@@ -34,7 +41,20 @@ namespace Controllers
       }
       return cus1.tocustomerDTO();
      }
-    
+
+    [Route("info")]
+    [HttpGet]
+    public async Task<ActionResult<customerDTO>> CustomerInfoFormToken()
+    {
+      var auth =  Request.Headers["Authorization"].ToString();
+      var jwt = auth.Substring(auth.IndexOf(" ")+1);
+      var handler = new JwtSecurityTokenHandler();
+      var token = handler.ReadJwtToken(jwt);
+      var subject = token.Subject;
+      var cus = await _context.customers.Where(cus=>cus.phoneNumber==subject).FirstAsync();
+      return cus!=null ? cus.tocustomerDTO() : NotFound();
+    }
+
      [HttpPost]
      public async Task<ActionResult<customerDTO>> Createcustomer(customerDTO cus2)
      {
@@ -43,6 +63,7 @@ namespace Controllers
          await _context.SaveChangesAsync();
          return CreatedAtAction(nameof(Getcustomer),new {id=cus1.id},cus1);
      }
+
      [HttpPut]
      public async Task<IActionResult> Updatecustomer(customerDTO cus2)
      {
