@@ -8,14 +8,16 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using DTO;
+using System.IdentityModel.Tokens.Jwt;
+
 namespace Controllers
 {
 [Route("api/[controller]")]
     [ApiController]
- public class SellerController : ControllerBase
+ public class SellersController : ControllerBase
  {
      private readonly EcommerContext _context;
-     public SellerController(EcommerContext context)
+     public SellersController(EcommerContext context)
      {
          _context=context;
      }
@@ -34,6 +36,20 @@ namespace Controllers
       }
       return sel1.tosellerdto();
      }
+
+    [Route("info")]
+    [HttpGet]
+    public async Task<ActionResult<SellerDTO>> SellerInfoFormToken()
+    {
+      var auth = Request.Headers["Authorization"].ToString();
+      var jwt = auth.Substring(auth.IndexOf(" ") + 1);
+      var handler = new JwtSecurityTokenHandler();
+      var token = handler.ReadJwtToken(jwt);
+      var subject = token.Subject;
+      var seller = await _context.seller.Where(seller => seller.phoneNumer == subject).FirstAsync();
+      return seller != null ? seller.tosellerdto() : NotFound();
+    }
+
      [HttpPost]
      public async Task<ActionResult<SellerDTO>> Createseller(SellerDTO s)
      {
