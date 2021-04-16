@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 namespace DTO
 {
     
@@ -15,6 +16,7 @@ public class SkuDTO
         public int length{get;set;}
         public int weight{get;set;}
         public decimal price{get;set;}
+        public IEnumerable<imageDTO> image1{get;set;}
         public int productId{get;set;}
 }
 }

@@ -3,10 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using DTO;
+using Data;
 namespace DTO
 {
   public static class MappingProfile
   {
+    public static EcommerContext _context;
     public static SkuDTO toskuDTO(this sku sku1)
     {
       return new SkuDTO()
@@ -103,7 +105,7 @@ namespace DTO
     {
       return new order_tableDTO()
       {
-
+         id=ord.id,
         createDate = ord.createDate,
         updateDate = ord.updateDate,
         paymentMethod = ord.paymentMethod,
@@ -111,21 +113,22 @@ namespace DTO
         shippingAddress = ord.shippingAddress,
         totalPrice = ord.totalPrice,
         status = ord.status,
-        customerId = ord.customerId
+        customerId=ord.customerId
       };
     }
     public static order_tbl toorder_tbl(this order_tableDTO ord1)
     {
       return new order_tbl()
       {
-
+          id=ord1.id,
         createDate = ord1.createDate,
         updateDate = ord1.updateDate,
         paymentMethod = ord1.paymentMethod,
         shippingFee = ord1.shippingFee,
         shippingAddress = ord1.shippingAddress,
         totalPrice = ord1.totalPrice,
-        status = ord1.status
+        status = ord1.status,
+        customerId=ord1.customerId
       };
     }
     public static void Mapto2(this order_tbl ord, order_tableDTO ord1)
@@ -138,20 +141,21 @@ namespace DTO
       ord.shippingAddress = ord1.shippingAddress;
       ord.totalPrice = ord1.totalPrice;
       ord.status = ord1.status;
+      ord.customerId=ord1.customerId;
     }
     public static imageDTO toimageDto(this images img)
     {
       return new imageDTO()
-      {
+      { id=img.id,
         url = img.url,
-        skuId = img.skuId,
+        skuId = img.skuId
 
       };
     }
     public static images toimage(this imageDTO img1)
     {
       return new images()
-      {
+      { id=img1.id,
         url = img1.url,
         skuId = img1.skuId
 

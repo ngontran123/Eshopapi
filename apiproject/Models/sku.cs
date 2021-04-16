@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 namespace Models{
     public class sku{
    [Required]
@@ -21,7 +22,7 @@ namespace Models{
         public int weight{get;set;}
         [RegularExpression(@"\D+")]
         public decimal price{get;set;}
+        public IEnumerable<images> image1{get;set;}
         public virtual Products product{get;set;}
-        public virtual images Images{get;set;}
     }
 }

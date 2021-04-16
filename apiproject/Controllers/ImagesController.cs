@@ -10,6 +10,9 @@ using Models;
 using DTO;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
+using System.Drawing;
+using System.Net.Http;
+using System.Text;
 
 namespace Controllers
 {
@@ -103,11 +106,35 @@ namespace Controllers
         return NotFound();
       }
     }
-
+        
     public string GetPhysicalPathFromRelativeUrl(string url)
     {
       var path = Path.Combine(_environment.ContentRootPath, url.TrimStart('/').Replace("/", "\\"));
       return path;
     }
+    [HttpGet]
+    [Route("encode/{img}")]
+    
+      public String encode64base(String img)
+     {  String url="/Images/"+img;
+       String url1=GetPhysicalPathFromRelativeUrl(url);
+       byte[] imageArray = System.IO.File.ReadAllBytes(url1);  
+       
+         var base64=Convert.ToBase64String(imageArray);
+         return base64;
+     }
+     [HttpPost]
+     [Route("decode")]
+         public IActionResult decode64base([FromBody]images i)
+     {   
+         byte[] imageBytes = Convert.FromBase64String(i.url);  
+    MemoryStream ms = new MemoryStream(imageBytes, 0, imageBytes.Length);  
+    ms.Write(imageBytes, 0, imageBytes.Length);  
+    System.Drawing.Image image = System.Drawing.Image.FromStream(ms, true);  
+    String url1="/Images/bitis.jpg";
+    String url2=GetPhysicalPathFromRelativeUrl(url1);
+    image.Save(url2);
+    return PhysicalFile(url2,"image/png");
+     }
   }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 namespace DTO{
     public class ProductDTO
     {
@@ -8,5 +9,6 @@ namespace DTO{
         public String productName{get;set;}
         public String description{get;set;}
         public String status{get;set;}
+         public IEnumerable<SkuDTO> skus1{get;set;}
     }
 }

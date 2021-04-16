@@ -15,6 +15,7 @@ namespace Models{
         public String description{get;set;}
         public String status{get;set;}
         public virtual brand Brand{get;set;}
+         public IEnumerable<sku> skus1{get;set;}
         public virtual Category Category{get;set;}
     }
 }

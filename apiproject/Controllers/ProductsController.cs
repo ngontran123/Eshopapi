@@ -33,6 +33,23 @@ namespace Controllers
      public async Task<IActionResult> GetProduct([FromQuery]PagedFilter filter,[FromQuery]int brandid,[FromQuery]int categoryid,[FromQuery]String status)
      {  
         var resfilter=new PagedFilter(filter.pagenumber,filter.pagesize);
+        List<ProductDTO> p=new List<ProductDTO>();
+        var data2=await _context.product.ToListAsync();
+        foreach(var pr1 in data2)
+        {
+            var prod=new ProductDTO
+            {
+                 id = pr1.id,
+        categoryId = pr1.categoryId,
+        brandId = pr1.brandId,
+        productName = pr1.productName,
+        description = pr1.description,
+        status = pr1.status,
+        skus1=_context.skus.Where(x=>x.productId==pr1.id).Select(p=>p.toskuDTO())
+            };
+            p.Add(prod);
+        }
+
         var data= await _context.product.Select(p=>p.toproductdto()).Skip((resfilter.pagenumber-1)*resfilter.pagesize).Take(resfilter.pagesize)
         .ToListAsync();
         var data1=await _context.product.Where(p=>p.brandId==brandid&&p.categoryId==categoryid&&p.status==status).Select(p=>p.toproductdto()).ToListAsync();
@@ -44,7 +61,7 @@ namespace Controllers
         else{
         var route=Request.Path.Value;
          var totalcount=await _context.product.Select(p=>p.toproductdto()).CountAsync();
-         var pagedesponse=Pagedresponse.createpagedresponse<ProductDTO>(data,filter,totalcount,_uriservice,route);
+         var pagedesponse=Pagedresponse.createpagedresponse<ProductDTO>(p,filter,totalcount,_uriservice,route);
          return Ok(pagedesponse);
         }
         }
@@ -53,12 +70,24 @@ namespace Controllers
        public async Task<ActionResult<ProductDTO>> GetProduct(int id)
      {
       var p1=await _context.product.FindAsync(id);
+            var prod=new ProductDTO
+            {
+                 id = p1.id,
+        categoryId = p1.categoryId,
+        brandId = p1.brandId,
+        productName = p1.productName,
+        description = p1.description,
+        status = p1.status,
+        skus1=_context.skus.Where(x=>x.productId==p1.id).Select(p=>p.toskuDTO())
+            };
+        
       if(p1==null)
 
       {
           return NotFound();
       }
-      return Ok(new Response<ProductDTO>(p1.toproductdto()));
+
+      return Ok(new Response<ProductDTO>(prod));
      }
 
      [HttpPost]

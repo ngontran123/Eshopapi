@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 namespace Models
 {
     public class order_tbl
@@ -15,6 +16,7 @@ namespace Models
         public string shippingAddress{get;set;}
         public decimal totalPrice {get;set;}
         public string status {get;set;}
-        public int customerId {get;set;}
+        public IEnumerable<order_item> orderitem1{get;set;}
+        public int customerId{get;set;}
     }
 }

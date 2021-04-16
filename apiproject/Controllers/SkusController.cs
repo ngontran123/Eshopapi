@@ -30,11 +30,32 @@ namespace Controllers
      public async Task<IActionResult> GetSkus([FromQuery]PagedFilter filter)
      {  
         var resfilter=new PagedFilter(filter.pagenumber,filter.pagesize);
+        List<SkuDTO> d=new List<SkuDTO>();
+        var data2=await _context.skus.ToListAsync();
+        foreach(var sku1 in data2)
+        {
+            var newsku=new SkuDTO{
+                  id = sku1.id,
+        seller_sku = sku1.seller_sku,
+        available = sku1.available,
+        quantity = sku1.quantity,
+        color = sku1.color,
+        size = sku1.size,
+        heigth = sku1.heigth,
+        width = sku1.width,
+        length = sku1.length,
+        weight = sku1.weight,
+        price = sku1.price,
+        productId = sku1.productId,
+        image1=_context.images.Where(x=>x.skuId==sku1.id).Select(p=>p.toimageDto())
+         };
+            d.Add(newsku);
+        }
         var data= await _context.skus.Select(p=>p.toskuDTO()).Skip((resfilter.pagenumber-1)*resfilter.pagesize).Take(resfilter.pagesize)
         .ToListAsync();
         var route=Request.Path.Value;
          var totalcount=await _context.skus.Select(p=>p.toskuDTO()).CountAsync();
-         var pagedesponse=Pagedresponse.createpagedresponse<SkuDTO>(data,filter,totalcount,_uriservice,route);
+         var pagedesponse=Pagedresponse.createpagedresponse<SkuDTO>(d,filter,totalcount,_uriservice,route);
          return Ok(pagedesponse);
      }
      [HttpGet("{id}")]
@@ -47,7 +68,22 @@ namespace Controllers
       {
           return NotFound();
       }
-      return Ok(new Response<SkuDTO>(sku1.toskuDTO()));
+      var newsku=new SkuDTO{
+                  id = sku1.id,
+        seller_sku = sku1.seller_sku,
+        available = sku1.available,
+        quantity = sku1.quantity,
+        color = sku1.color,
+        size = sku1.size,
+        heigth = sku1.heigth,
+        width = sku1.width,
+        length = sku1.length,
+        weight = sku1.weight,
+        price = sku1.price,
+        productId = sku1.productId,
+        image1=_context.images.Where(x=>x.skuId==sku1.id).Select(p=>p.toimageDto())
+            };
+      return Ok(new Response<SkuDTO>(newsku));
      }
      [HttpPost]
      public async Task<ActionResult<SkuDTO>> CreateProduct(SkuDTO sku2)

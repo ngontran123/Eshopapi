@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 namespace DTO{
     public class order_tableDTO
     {
@@ -11,7 +12,7 @@ namespace DTO{
         public string shippingAddress{get;set;}
         public decimal totalPrice {get;set;}
         public string status{get;set;}
-
-        public int customerId{get;set;} 
+        public int customerId{get;set;}
+       public IEnumerable<order_itemDTO> orderitem1{get;set;}
     }
 }

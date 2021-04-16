@@ -6,6 +6,7 @@ namespace Models{
         public string url{get;set;}
         public int skuId{get;set;}
         [Key]
+        [Required]
         public int id{get;set;}
        public virtual sku _sku{get;set;}
        
