@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 namespace DTO{
-    public class order_tableDTO
+    public class OrderTableDTO
     {
         
         public int id {get;set;}
@@ -13,6 +13,7 @@ namespace DTO{
         public decimal totalPrice {get;set;}
         public string status{get;set;}
         public int customerId{get;set;}
-       public IEnumerable<order_itemDTO> orderitem1{get;set;}
+       public IEnumerable<order_itemDTO> orderItems{get;set;}
+       public customerDTO customer{get;set;}
     }
 }

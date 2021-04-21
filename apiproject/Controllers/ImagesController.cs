@@ -13,6 +13,7 @@ using System.IO;
 using System.Drawing;
 using System.Net.Http;
 using System.Text;
+using Helpers;
 
 namespace Controllers
 {
@@ -46,16 +47,19 @@ namespace Controllers
     }
 
     [HttpPost]
-    public async Task<ActionResult<imageDTO>> CreateImage(imageDTO img2)
+    public async Task<ActionResult<imageDTO>> CreateImage(imageDTO imgDTO)
     {
-      var img1 = img2.toimage();
-      _context.images.Add(img1);
+      var imgEntity = imgDTO.toimage();
+      Base64Url base64Url = new Base64Url(_environment);
+      Image physicalImg = base64Url.decode(imgEntity.url);
+      imgEntity.url = base64Url.writeImage(physicalImg);
+      _context.images.Add(imgEntity);
       await _context.SaveChangesAsync();
-      return CreatedAtAction(nameof(GetImage), new { id = img1.id }, img1);
+      return CreatedAtAction(nameof(GetImage), new { id = imgEntity.id }, imgEntity);
     }
 
     [HttpPut]
-    public async Task<IActionResult> Updateproduct(imageDTO img2)
+    public async Task<IActionResult> UpdateImage(imageDTO img2)
     {
       var img1 = await _context.images.FindAsync(img2.id);
       if (img1 == null)
@@ -64,77 +68,70 @@ namespace Controllers
       }
       img1.Mapto3(img2);
       _context.images.Update(img1);
-      try
-      {
-        await _context.SaveChangesAsync();
-      }
-      catch (DbUpdateConcurrencyException) when (!ImgExist(img1.id))
-      {
-        return NotFound();
-      }
-      return NoContent();
+      await _context.SaveChangesAsync();
+      return Ok();
     }
 
-    public bool ImgExist(int id)
-    {
-      return _context.images.Any(p => p.id == id);
-    }
     [HttpDelete("{id}")]
 
-    public async Task<IActionResult> DeleteImage(int skuid)
+    public async Task<IActionResult> DeleteImage(int id)
     {
-      var img1 = await _context.images.FindAsync(skuid);
+      var img1 = await _context.images.FindAsync(id);
       if (img1 == null)
       {
         return NotFound();
       }
       _context.images.Remove(img1);
       await _context.SaveChangesAsync();
-      return NoContent();
+      return Ok();
     }
 
     [HttpGet]
     [Route("bitmap/{img}")]
     public async Task<IActionResult> Get(string img)
     {
-      var url = "/Images/"+img;
+      var url = "/Images/" + img;
       var path = GetPhysicalPathFromRelativeUrl(url);
       if (System.IO.File.Exists(path))
       {
         return PhysicalFile(path, "image/png");
-      } else {
+      }
+      else
+      {
         return NotFound();
       }
     }
-        
+
     public string GetPhysicalPathFromRelativeUrl(string url)
     {
       var path = Path.Combine(_environment.ContentRootPath, url.TrimStart('/').Replace("/", "\\"));
       return path;
     }
-    [HttpGet]
-    [Route("encode/{img}")]
-    
-      public String encode64base(String img)
-     {  String url="/Images/"+img;
-       String url1=GetPhysicalPathFromRelativeUrl(url);
-       byte[] imageArray = System.IO.File.ReadAllBytes(url1);  
-       
-         var base64=Convert.ToBase64String(imageArray);
-         return base64;
-     }
-     [HttpPost]
-     [Route("decode")]
-         public IActionResult decode64base([FromBody]images i)
-     {   
-         byte[] imageBytes = Convert.FromBase64String(i.url);  
-    MemoryStream ms = new MemoryStream(imageBytes, 0, imageBytes.Length);  
-    ms.Write(imageBytes, 0, imageBytes.Length);  
-    System.Drawing.Image image = System.Drawing.Image.FromStream(ms, true);  
-    String url1="/Images/bitis.jpg";
-    String url2=GetPhysicalPathFromRelativeUrl(url1);
-    image.Save(url2);
-    return PhysicalFile(url2,"image/png");
-     }
+    // [HttpGet]
+    // [Route("encode/{img}")]
+
+    // public String encode64base(String img)
+    // {
+    //   String url = "/Images/" + img;
+    //   String url1 = GetPhysicalPathFromRelativeUrl(url);
+    //   byte[] imageArray = System.IO.File.ReadAllBytes(url1);
+
+    //   var base64 = Convert.ToBase64String(imageArray);
+    //   return base64;
+    // }
+
+    // [HttpPost]
+    // [Route("decode")]
+    // public IActionResult decode64base([FromBody] images i)
+    // {
+    //   byte[] imageBytes = Convert.FromBase64String(i.url);
+    //   MemoryStream ms = new MemoryStream(imageBytes, 0, imageBytes.Length);
+    //   ms.Write(imageBytes, 0, imageBytes.Length);
+    //   System.Drawing.Image image = System.Drawing.Image.FromStream(ms, true);
+    //   String url1 = "/Images/bitis.jpg";
+    //   String url2 = GetPhysicalPathFromRelativeUrl(url1);
+    //   image.Save(url2);
+    //   return PhysicalFile(url2, "image/png");
+    // }
   }
 }

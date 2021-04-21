@@ -5,19 +5,19 @@ namespace Helpers
 {
     public class PagedList<T>:Response<T>
     {
-        public int pagenumber{get;set;}
-        public int pagesize{get;set;}
+        public int pageIndex{get;set;}
+        public int pageSize{get;set;}
         public int totalpage{get;set;}
         public Uri firstpage{get;set;}
         public Uri lastpage{get;set;}
         public Uri nextpage{get;set;}
         public Uri prevpage{get;set;}
-        public int totalcount{get;set;}
+        public int count{get;set;}
     
-    public PagedList(T data,int pagenumber,int pagesize)
+    public PagedList(T data,int pageIndex,int pagesize)
     {
-        this.pagenumber=pagenumber;
-        this.pagesize=pagesize;
+        this.pageIndex=pageIndex;
+        this.pageSize=pagesize;
         this.Data=data;
     }
     }

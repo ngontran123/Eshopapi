@@ -16,8 +16,8 @@ namespace Baseurl
      public Uri getpageurl(PagedFilter filter,string route)
      {
          var endpointurl= new Uri(string.Concat(_base_url,route));
-         var modifield=(QueryHelpers.AddQueryString(endpointurl.ToString(),"pagenumber",filter.pagenumber.ToString()));
-         modifield=(QueryHelpers.AddQueryString(modifield,"pagesize",filter.pagesize.ToString()));
+         var modifield=(QueryHelpers.AddQueryString(endpointurl.ToString(),"pagenumber",filter.pageIndex.ToString()));
+         modifield=(QueryHelpers.AddQueryString(modifield,"pagesize",filter.pageSize.ToString()));
          return new Uri(modifield);
      }
     }

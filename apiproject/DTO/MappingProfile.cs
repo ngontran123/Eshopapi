@@ -19,13 +19,12 @@ namespace DTO
         quantity = sku1.quantity,
         color = sku1.color,
         size = sku1.size,
-        heigth = sku1.heigth,
+        height = sku1.height,
         width = sku1.width,
         length = sku1.length,
         weight = sku1.weight,
         price = sku1.price,
         productId = sku1.productId
-
       };
 
     }
@@ -39,7 +38,7 @@ namespace DTO
         quantity = sku2.quantity,
         color = sku2.color,
         size = sku2.size,
-        heigth = sku2.heigth,
+        height = sku2.height,
         width = sku2.width,
         length = sku2.length,
         weight = sku2.weight,
@@ -55,7 +54,7 @@ namespace DTO
       sku1.quantity = sku2.quantity;
       sku1.color = sku2.color;
       sku1.size = sku2.size;
-      sku1.heigth = sku2.heigth;
+      sku1.height = sku2.height;
       sku1.width = sku2.width;
       sku1.length = sku2.length;
       sku1.weight = sku2.weight;
@@ -101,9 +100,9 @@ namespace DTO
       ori.price = ori1.price;
       ori.quantity = ori1.quantity;
     }
-    public static order_tableDTO toorder_tblDTO(this order_tbl ord)
+    public static OrderTableDTO toorder_tblDTO(this order_tbl ord)
     {
-      return new order_tableDTO()
+      return new OrderTableDTO()
       {
          id=ord.id,
         createDate = ord.createDate,
@@ -116,7 +115,7 @@ namespace DTO
         customerId=ord.customerId
       };
     }
-    public static order_tbl toorder_tbl(this order_tableDTO ord1)
+    public static order_tbl toOrder(this OrderTableDTO ord1)
     {
       return new order_tbl()
       {
@@ -131,7 +130,7 @@ namespace DTO
         customerId=ord1.customerId
       };
     }
-    public static void Mapto2(this order_tbl ord, order_tableDTO ord1)
+    public static void Mapto2(this order_tbl ord, OrderTableDTO ord1)
     {
       ord.id = ord1.id;
       ord.createDate = ord1.createDate;
@@ -181,7 +180,7 @@ namespace DTO
         gender = c.gender
       };
     }
-    public static customer tocustomer(this customerDTO c1)
+    public static customer toCustomer(this customerDTO c1)
     {
       return new customer()
       {
@@ -231,7 +230,7 @@ namespace DTO
       b.id = b1.id;
       b.name = b1.name;
     }
-    public static ProductDTO toproductdto(this Products pr1)
+    public static ProductDTO toProductDTO(this Products pr1)
     {
       return new ProductDTO()
       {
@@ -243,7 +242,7 @@ namespace DTO
         status = pr1.status
       };
     }
-    public static Products toproduct(this ProductDTO pr2)
+    public static Products toProduct(this ProductDTO pr2)
     {
       return new Products()
       {
@@ -264,7 +263,7 @@ namespace DTO
       pr1.description = pr2.description;
       pr1.status = pr2.status;
     }
-    public static AddressDTO toaddressdto(this Address ad)
+    public static AddressDTO toAddressDTO(this Address ad)
     {
       return new AddressDTO()
       {
@@ -276,7 +275,7 @@ namespace DTO
         address3 = ad.address3
       };
     }
-    public static Address toaddress(this AddressDTO ad1)
+    public static Address toAddress(this AddressDTO ad1)
     {
       return new Address()
       {
@@ -297,7 +296,7 @@ namespace DTO
       ad.address2 = ad1.address2;
       ad.address3 = ad1.address3;
     }
-    public static CategoryDTO tocategoryDTO(this Category c)
+    public static CategoryDTO toCategoryDTO(this Category c)
     {
       return new CategoryDTO()
       {
@@ -305,7 +304,7 @@ namespace DTO
         name = c.name
       };
     }
-    public static Category tocategory(this CategoryDTO c1)
+    public static Category toCategory(this CategoryDTO c1)
     {
       return new Category()
       {
@@ -318,12 +317,12 @@ namespace DTO
       c.id = c1.id;
       c.name = c1.name;
     }
-    public static SellerDTO tosellerdto(this Seller s)
+    public static SellerDTO toSellerDTO(this Seller s)
     {
       return new SellerDTO()
       {
         id = s.id,
-        phoneNumer = s.phoneNumer,
+        phoneNumber = s.phoneNumber,
         name = s.name,
         email = s.email,
         password = s.password,
@@ -333,12 +332,12 @@ namespace DTO
         refreshToken = s.refreshToken
       };
     }
-    public static Seller toseller(this SellerDTO s1)
+    public static Seller toSeller(this SellerDTO s1)
     {
       return new Seller()
       {
         id = s1.id,
-        phoneNumer = s1.phoneNumer,
+        phoneNumber = s1.phoneNumber,
         name = s1.name,
         email = s1.email,
         password = s1.password,
@@ -351,7 +350,7 @@ namespace DTO
     public static void Mapto9(this Seller s, SellerDTO s1)
     {
       s.id = s1.id;
-      s.phoneNumer = s1.phoneNumer;
+      s.phoneNumber = s1.phoneNumber;
       s.name = s1.name;
       s.email = s1.email;
       s.password = s1.password;
@@ -371,7 +370,8 @@ namespace DTO
         street = s.street,
         address1 = s.address1,
         address2 = s.address2,
-        address3 = s.address3
+        address3 = s.address3,
+        isDefault = s.isDefault,
       };
     }
     public static Selleraddress toselleraddress(this SelleraddressDTO s1)
@@ -383,7 +383,8 @@ namespace DTO
         street = s1.street,
         address1 = s1.address1,
         address2 = s1.address2,
-        address3 = s1.address3
+        address3 = s1.address3,
+        isDefault = s1.isDefault
       };
     }
     public static void Mapto10(this Selleraddress s, SelleraddressDTO s1)

@@ -22,7 +22,7 @@ namespace Controllers
      [HttpGet]
      public async Task<IEnumerable<AddressDTO>> Getaddress()
      {
-        return await _context.addresses.Select(p=>p.toaddressdto()).ToListAsync();
+        return await _context.addresses.Select(p=>p.toAddressDTO()).ToListAsync();
      }
      [HttpGet("{id}")]
      public async Task<ActionResult<AddressDTO>> Getaddress(int id)
@@ -32,12 +32,12 @@ namespace Controllers
       {
           return NotFound();
       }
-      return b1.toaddressdto();
+      return b1.toAddressDTO();
      }
      [HttpPost]
      public async Task<ActionResult<AddressDTO>> CreateProduct(AddressDTO ad2)
      {
-         var ad1=ad2.toaddress();
+         var ad1=ad2.toAddress();
          _context.addresses.Add(ad1);
          await _context.SaveChangesAsync();
          return CreatedAtAction(nameof(Getaddress),new {id=ad1.id},ad1);

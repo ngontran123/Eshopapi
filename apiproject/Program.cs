@@ -11,35 +11,35 @@ using Models;
 using Data;
 namespace apiproject
 {
-    public class Program
+  public class Program
+  {
+    public static void Main(string[] args)
     {
-        public static void Main(string[] args)
+      var host = CreateHostBuilder(args).Build();
+
+      using (var scope = host.Services.CreateScope())
+      {
+        var services = scope.ServiceProvider;
+        try
         {
-            var host=CreateHostBuilder(args).Build();
-            
-            using (var scope = host.Services.CreateScope())
-            {
-                var services = scope.ServiceProvider;
-                try
-                {
-                    var context = services.GetRequiredService<EcommerContext>();
-                    Seeds.Seed(context);
-                }
-                catch (Exception ex)
-                {
-                    var logger = services.GetRequiredService<ILogger<Program>>();
-                    logger.LogError(ex.Message);
-                }
-
+          var context = services.GetRequiredService<EcommerContext>();
+          Seeds.Seed(context);
         }
-          host.Run();
+        catch (Exception ex)
+        {
+          var logger = services.GetRequiredService<ILogger<Program>>();
+          logger.LogError(ex.Message);
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
+      }
+      host.Run();
     }
+
+    public static IHostBuilder CreateHostBuilder(string[] args) =>
+        Host.CreateDefaultBuilder(args)
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+              webBuilder.UseStartup<Startup>();
+            });
+  }
 }

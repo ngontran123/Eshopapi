@@ -16,124 +16,113 @@ using Filter;
 using Baseurl;
 namespace Controllers
 {
-[Route("api/[controller]")]
-    [ApiController]
-     [CamelCaseControllerConfig]
- public class ProductsController : ControllerBase
- {
-     private readonly EcommerContext _context;
-     private readonly IrulService _uriservice; 
-          public ProductsController(EcommerContext context,IrulService uriservice)
-     {
-         _context=context;
-         this._uriservice=uriservice;
-     }
-      [CamelCaseControllerConfig]
-     [HttpGet]
-     public async Task<IActionResult> GetProduct([FromQuery]PagedFilter filter,[FromQuery]int brandid,[FromQuery]int categoryid,[FromQuery]String status)
-     {  
-        var resfilter=new PagedFilter(filter.pagenumber,filter.pagesize);
-        List<ProductDTO> p=new List<ProductDTO>();
-        var data2=await _context.product.ToListAsync();
-        foreach(var pr1 in data2)
-        {
-            var prod=new ProductDTO
-            {
-                 id = pr1.id,
-        categoryId = pr1.categoryId,
-        brandId = pr1.brandId,
-        productName = pr1.productName,
-        description = pr1.description,
-        status = pr1.status,
-        skus1=_context.skus.Where(x=>x.productId==pr1.id).Select(p=>p.toskuDTO())
-            };
-            p.Add(prod);
-        }
+  [Route("api/[controller]")]
+  [ApiController]
+  [CamelCaseControllerConfig]
+  public class ProductsController : ControllerBase
+  {
+    private readonly EcommerContext _context;
+    private readonly IrulService _uriservice;
+    public ProductsController(EcommerContext context, IrulService uriservice)
+    {
+      _context = context;
+      this._uriservice = uriservice;
+    }
 
-        var data= await _context.product.Select(p=>p.toproductdto()).Skip((resfilter.pagenumber-1)*resfilter.pagesize).Take(resfilter.pagesize)
-        .ToListAsync();
-        var data1=await _context.product.Where(p=>p.brandId==brandid&&p.categoryId==categoryid&&p.status==status).Select(p=>p.toproductdto()).ToListAsync();
-        if(brandid!=' '&&categoryid!=' '&&status!=null)
-        {
-            return Ok(data1);
-        }
+    [CamelCaseControllerConfig]
+    [HttpGet]
+    public async Task<IActionResult> GetProduct([FromQuery] PagedFilter filter, [FromQuery] int brandid, [FromQuery] int categoryid, [FromQuery] String status)
+    {
+      var resfilter = new PagedFilter(filter.pageIndex, filter.pageSize);
 
-        else{
-        var route=Request.Path.Value;
-         var totalcount=await _context.product.Select(p=>p.toproductdto()).CountAsync();
-         var pagedesponse=Pagedresponse.createpagedresponse<ProductDTO>(p,filter,totalcount,_uriservice,route);
-         return Ok(pagedesponse);
-        }
-        }
-      [CamelCaseControllerConfig]
-     [HttpGet("{id}")]
-       public async Task<ActionResult<ProductDTO>> GetProduct(int id)
-     {
-      var p1=await _context.product.FindAsync(id);
-            var prod=new ProductDTO
-            {
-                 id = p1.id,
-        categoryId = p1.categoryId,
-        brandId = p1.brandId,
-        productName = p1.productName,
-        description = p1.description,
-        status = p1.status,
-        skus1=_context.skus.Where(x=>x.productId==p1.id).Select(p=>p.toskuDTO())
-            };
-        
-      if(p1==null)
+      var productDTOs = await _context.product
+      .Where(p => 
+        (brandid != 0 ? p.brandId == brandid : true) 
+        && (categoryid != 0 ? p.categoryId == categoryid : true) 
+        && (status != null ? p.status.Equals(status) : true))
+      .Select(p=>p.toProductDTO())
+      .ToListAsync();
 
+      foreach (var productDTO in productDTOs)
       {
-          return NotFound();
+        // Create skuDTOs
+        var skuDTOs = await _context.skus.Where(sku => sku.productId == productDTO.id).Select(sku => sku.toskuDTO()).ToListAsync();
+        foreach(var skuDTO in skuDTOs){
+            // Create imageDTOs
+            skuDTO.images = await _context.images.Where(img => img.skuId == skuDTO.id).Select(img=>img.toimageDto()).ToListAsync();
+        }
+        productDTO.skus = skuDTOs;
       }
+        var route = Request.Path.Value;
+        var totalcount = await _context.product.Select(p => p.toProductDTO()).CountAsync();
+        var pagedesponse = Pagedresponse.createpagedresponse<ProductDTO>(productDTOs, filter, totalcount, _uriservice, route);
+        return Ok(pagedesponse);
+    }
 
-      return Ok(new Response<ProductDTO>(prod));
-     }
+    [CamelCaseControllerConfig]
+    [HttpGet("{id}")]
+    public async Task<ActionResult<ProductDTO>> GetProduct(int id)
+    {
+      var product = await _context.product.FindAsync(id);
+      var productDTO = product.toProductDTO();
+      var skuDTOs = await _context.skus.Where(sku => sku.productId == productDTO.id).Select(sku => sku.toskuDTO()).ToListAsync();
+      foreach(var skuDTO in skuDTOs){
+        skuDTO.images = await _context.images.Where(img => img.skuId == skuDTO.id).Select(image=>image.toimageDto()).ToListAsync();
+      }
+      productDTO.skus = skuDTOs;
+      if (productDTO == null)
+      {
+        return NotFound();
+      }
+      return Ok(new Response<ProductDTO>(productDTO));
+    }
 
-     [HttpPost]
-     public async Task<ActionResult<ProductDTO>> CreateProduct(ProductDTO p2)
-     {
-         var p1=p2.toproduct();
-         _context.product.Add(p1);
-         await _context.SaveChangesAsync();
-         return CreatedAtAction(nameof(GetProduct),new {id=p1.id},p1);
-     }
-     [HttpPut]
-     public async Task<IActionResult> Updateproduct(ProductDTO p2)
-     {
-         var p1=await _context.product.FindAsync(p2.id);
-         if(p1==null)
-         {
-             return NotFound();
-         }
-        p1.Mapto6(p2);
-        _context.product.Update(p1);
-        try{
-            await _context.SaveChangesAsync();
-        }
-        catch(DbUpdateConcurrencyException) when (!ProductExist(p1.id))
-        {
-            return NotFound();
-        }
-        return NoContent();
-     }
+    [HttpPost]
+    public async Task<ActionResult<ProductDTO>> CreateProduct(ProductDTO p2)
+    {
+      var p1 = p2.toProduct();
+      _context.product.Add(p1);
+      await _context.SaveChangesAsync();
+      return CreatedAtAction(nameof(GetProduct), new { id = p1.id }, p1);
+    }
 
-     public bool ProductExist(int id)
-     {
-         return _context.product.Any(p=>p.id==id);
-     }
-     [HttpDelete("{id}")]
-     
-     public async Task<IActionResult> DeleteProduct(int id)
-     {
-     var p1=await _context.product.FindAsync(id);
-     if(p1==null)
-     {
-         return NotFound();
-     }
-     _context.product.Remove(p1);
-     await _context.SaveChangesAsync();
-     return NoContent();
-     }
- }
+    [HttpPut]
+    public async Task<IActionResult> Updateproduct([FromBody] ProductDTO productForm)
+    {
+      var productEntity = await _context.product.FindAsync(productForm.id);
+      if (productEntity == null)
+      {
+        return NotFound();
+      }
+      productEntity.Mapto6(productForm);
+      _context.product.Update(productEntity);
+      try
+      {
+        await _context.SaveChangesAsync();
+      }
+      catch (DbUpdateConcurrencyException) when (!ProductExist(productEntity.id))
+      {
+        return NotFound();
+      }
+      return Ok();
+    }
+
+    public bool ProductExist(int id)
+    {
+      return _context.product.Any(p => p.id == id);
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteProduct(int id)
+    {
+      var p1 = await _context.product.FindAsync(id);
+      if (p1 == null)
+      {
+        return NotFound();
+      }
+      _context.product.Remove(p1);
+      await _context.SaveChangesAsync();
+      return NoContent();
+    }
+  }
 }

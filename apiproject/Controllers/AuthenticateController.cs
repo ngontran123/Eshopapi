@@ -31,6 +31,7 @@ namespace Controllers
       _configuration = configuration;
       _ecommerContext = ecommerContext;
     }
+
     [HttpPost]
     [Route("Login")]
     public async Task<IActionResult> login([FromBody] Login login)
@@ -78,6 +79,7 @@ namespace Controllers
       }
       return Unauthorized(new Response { status = "Lỗi", message = "Tài khoản không hợp lệ" });
     }
+    
     [HttpPost]
     [Route("{refreshToken}/refresh")]
     public async Task<IActionResult> Refreshtoken([FromRoute] string refresh)
@@ -120,6 +122,7 @@ namespace Controllers
       });
 
     }
+    
     [HttpPost]
     [Route("Register")]
     public async Task<IActionResult> Register([FromBody] Register register)
@@ -168,6 +171,7 @@ namespace Controllers
 
       return Ok(new Response { status = "ok", message = "Tài khoản được tạo thành công." });
     }
+    
     [HttpPost]
     [Route("register-seller")]
     public async Task<IActionResult> registeradmin([FromBody] Register register)
@@ -210,7 +214,7 @@ namespace Controllers
             {
                  name=user.PhoneNumber,
                  password=user.PasswordHash,
-                phoneNumer=user.UserName,
+                phoneNumber=user.UserName,
                  email=user.Email,
                  accessToken=null,
                  refreshToken=null

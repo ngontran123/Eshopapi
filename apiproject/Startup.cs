@@ -31,7 +31,6 @@ namespace apiproject
         {
             Configuration = configuration;
         }
-        
                
         public IConfiguration Configuration { get; }
 
@@ -42,7 +41,8 @@ namespace apiproject
                 options.AddPolicy(name: AllowSpecificOrigins,
                 builder =>
                 {
-                    builder.WithOrigins().AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
+                    // builder.WithOrigins("http://localhost:4201", "http://localhost:4200").AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin()
+                    builder.WithOrigins("http://localhost:4201").AllowAnyHeader().AllowAnyMethod();
                 });
             });
               services.AddControllers()
@@ -91,7 +91,7 @@ namespace apiproject
             }
 
             app.UseHttpsRedirection();
-
+            app.UseStaticFiles();
             app.UseRouting();
             app.UseCors(AllowSpecificOrigins);
             app.UseAuthentication();

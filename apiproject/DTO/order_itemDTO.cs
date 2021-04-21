@@ -9,5 +9,6 @@ namespace DTO{
         public string variation{get;set;}
         public decimal price{get;set;}
         public int quantity {get;set;}
+        public SkuDTO sku {get;set;}
     }
 }

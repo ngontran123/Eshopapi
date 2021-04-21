@@ -24,17 +24,17 @@ namespace Controllers
          _context=context;
          _urlservice=urlservice;
      }
+
      [HttpGet]
-     public async Task<IActionResult> Getorderitem([FromQuery]PagedFilter filter1)
-     {  var route=Request.Path.Value;
-        var filter=new PagedFilter(filter1.pagenumber,filter1.pagesize);
-        var data=await _context.orderitem.Select(p=>p.toorder_itemDTO()).Skip((filter.pagenumber-1)*filter.pagesize).Take(filter.pagesize).ToListAsync();
-        int totalcount=await _context.orderitem.Select(p=>p.toorder_itemDTO()).CountAsync();
-        var pagedesponse=Pagedresponse.createpagedresponse<order_itemDTO>(data,filter,totalcount,_urlservice,route);
-        return Ok(pagedesponse);
+     public async Task<IActionResult> GetOrderItems([FromQuery]PagedFilter filter1)
+     {  
+        var filter=new PagedFilter(filter1.pageIndex,filter1.pageSize);
+        var data=await _context.orderitem.Select(p=>p.toorder_itemDTO()).ToListAsync();
+        return Ok(data);
      }
+
      [HttpGet("{id}")]
-     public async Task<ActionResult<order_itemDTO>> Getorderitem(int id)
+     public async Task<ActionResult<order_itemDTO>> GetOrderItem(int id)
      {
       var or=await _context.orderitem.FindAsync(id);
       if(or==null)
@@ -43,38 +43,35 @@ namespace Controllers
       }
       return Ok(new Response<order_itemDTO>(or.toorder_itemDTO()));
      }
+
      [HttpPost]
-     public async Task<ActionResult<order_itemDTO>> CreateProduct(order_itemDTO or2)
+     public async Task<ActionResult<order_itemDTO>> CreateItem(order_itemDTO or2)
      {
          var or1=or2.toorder_item();
          _context.orderitem.Add(or1);
          await _context.SaveChangesAsync();
-         return CreatedAtAction(nameof(Getorderitem),new {id=or1.id},or1);
-     }
-     [HttpPut]
-     public async Task<IActionResult> Updateproduct(order_itemDTO or2)
-     {
-         var or1=await _context.orderitem.FindAsync(or2.id);
-         if(or1==null)
-         {
-             return NotFound();
-         }
-        or1.Mapto1(or2);
-        _context.orderitem.Update(or1);
-        try{
-            await _context.SaveChangesAsync();
-        }
-        catch(DbUpdateConcurrencyException) when (!orderitemExist(or1.id))
-        {
-            return NotFound();
-        }
-        return NoContent();
+         return CreatedAtAction(nameof(GetOrderItem),new {id=or1.id},or1);
      }
 
-     public bool orderitemExist(int id)
-     {
-         return _context.orderitem.Any(p=>p.id==id);
-     }
+     [HttpPut]
+    public async Task<IActionResult> UpdateItem(order_itemDTO or2)
+    {
+      var or1 = await _context.orderitem.FindAsync(or2.id);
+      if (or1 == null)
+      {
+        return NotFound();
+      }
+      or1.Mapto1(or2);
+      _context.orderitem.Update(or1);
+      await _context.SaveChangesAsync();
+      return NoContent();
+    }
+
+    //  public bool orderitemExist(int id)
+    //  {
+    //      return _context.orderitem.Any(p=>p.id==id);
+    //  }
+
      [HttpDelete("{id}")]
      
      public async Task<IActionResult> Deleteprderitem(int id)

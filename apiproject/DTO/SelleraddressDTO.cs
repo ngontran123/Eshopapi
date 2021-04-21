@@ -9,5 +9,6 @@ namespace Models{
    public String address1{get;set;}
   public String address2{get;set;}
   public String address3{get;set;}
+  public bool isDefault {get;set;}
     }
 }

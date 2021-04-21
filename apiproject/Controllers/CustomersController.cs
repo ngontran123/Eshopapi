@@ -24,6 +24,7 @@ namespace Controllers
      {
          _context=context;
      }
+     
      [HttpGet]
     public async Task<IEnumerable<customerDTO>> Getcustomer(string phoneNumber)
     {
@@ -58,7 +59,7 @@ namespace Controllers
      [HttpPost]
      public async Task<ActionResult<customerDTO>> Createcustomer(customerDTO cus2)
      {
-         var cus1=cus2.tocustomer();
+         var cus1=cus2.toCustomer();
          _context.customers.Add(cus1);
          await _context.SaveChangesAsync();
          return CreatedAtAction(nameof(Getcustomer),new {id=cus1.id},cus1);

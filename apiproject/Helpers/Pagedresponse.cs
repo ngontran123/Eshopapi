@@ -8,14 +8,15 @@ namespace Helpers
     {
         public static PagedList<IEnumerable<T>> createpagedresponse<T>(IEnumerable<T> data,PagedFilter filter,int totalcount,IrulService uriservice,string route)
         {
-            var res=new PagedList<IEnumerable<T>>(data,filter.pagenumber,filter.pagesize);
-            var totalpage=(double)totalcount/(double)filter.pagesize;
+            var res=new PagedList<IEnumerable<T>>(data,filter.pageIndex,filter.pageSize);
+            var totalpage=(double)totalcount/(double)filter.pageSize;
             int totalpage1=Convert.ToInt32(Math.Ceiling(totalpage));
-            res.nextpage=filter.pagenumber>=1&&filter.pagenumber<totalpage ? uriservice.getpageurl(new PagedFilter(filter.pagenumber+1,filter.pagesize),route):null;
-            res.prevpage=filter.pagenumber-1>=1&&filter.pagenumber<=totalpage ? uriservice.getpageurl(new PagedFilter(filter.pagenumber-1,filter.pagesize),route):null;
-            res.firstpage=uriservice.getpageurl(new PagedFilter(1,filter.pagesize),route);
-            res.lastpage=uriservice.getpageurl(new PagedFilter(totalpage1,filter.pagesize),route);
+            res.nextpage=filter.pageIndex>=1&&filter.pageIndex<totalpage ? uriservice.getpageurl(new PagedFilter(filter.pageIndex+1,filter.pageSize),route):null;
+            res.prevpage=filter.pageIndex-1>=1&&filter.pageIndex<=totalpage ? uriservice.getpageurl(new PagedFilter(filter.pageIndex-1,filter.pageSize),route):null;
+            res.firstpage=uriservice.getpageurl(new PagedFilter(1,filter.pageSize),route);
+            res.lastpage=uriservice.getpageurl(new PagedFilter(totalpage1,filter.pageSize),route);
             res.totalpage=totalpage1;
+            res.count = totalcount;
             return res;
         } 
     }

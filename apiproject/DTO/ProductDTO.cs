@@ -9,6 +9,6 @@ namespace DTO{
         public String productName{get;set;}
         public String description{get;set;}
         public String status{get;set;}
-         public IEnumerable<SkuDTO> skus1{get;set;}
+         public IEnumerable<SkuDTO> skus{get;set;}
     }
 }

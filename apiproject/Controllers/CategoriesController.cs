@@ -22,7 +22,7 @@ namespace Controllers
      [HttpGet]
      public async Task<IEnumerable<CategoryDTO>> Getcategory()
      {
-        return await _context.category.Select(p=>p.tocategoryDTO()).ToListAsync();
+        return await _context.category.Select(p=>p.toCategoryDTO()).ToListAsync();
      }
      [HttpGet("{id}")]
      public async Task<ActionResult<CategoryDTO>> Getcategory(int id)
@@ -32,12 +32,12 @@ namespace Controllers
       {
           return NotFound();
       }
-      return b1.tocategoryDTO();
+      return b1.toCategoryDTO();
      }
      [HttpPost]
      public async Task<ActionResult<CategoryDTO>> Createcategory(CategoryDTO c2)
      {
-         var c1=c2.tocategory();
+         var c1=c2.toCategory();
          _context.category.Add(c1);
          await _context.SaveChangesAsync();
          return CreatedAtAction(nameof(Getcategory),new {id=c1.id},c1);

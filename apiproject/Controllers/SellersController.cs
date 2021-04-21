@@ -21,11 +21,13 @@ namespace Controllers
      {
          _context=context;
      }
+
      [HttpGet]
      public async Task<IEnumerable<SellerDTO>> GetSeller()
      {
-        return await _context.seller.Select(p=>p.tosellerdto()).ToListAsync();
+        return await _context.seller.Select(p=>p.toSellerDTO()).ToListAsync();
      }
+
      [HttpGet("{id}")]
      public async Task<ActionResult<SellerDTO>> GetSeller(int id)
      {
@@ -34,7 +36,7 @@ namespace Controllers
       {
           return NotFound();
       }
-      return sel1.tosellerdto();
+      return sel1.toSellerDTO();
      }
 
     [Route("info")]
@@ -46,18 +48,19 @@ namespace Controllers
       var handler = new JwtSecurityTokenHandler();
       var token = handler.ReadJwtToken(jwt);
       var subject = token.Subject;
-      var seller = await _context.seller.Where(seller => seller.phoneNumer == subject).FirstAsync();
-      return seller != null ? seller.tosellerdto() : NotFound();
+      var seller = await _context.seller.Where(seller => seller.phoneNumber.Equals(subject)).FirstAsync();
+      return Ok(seller);
     }
 
      [HttpPost]
-     public async Task<ActionResult<SellerDTO>> Createseller(SellerDTO s)
+     public async Task<ActionResult<SellerDTO>> CreateSeller(SellerDTO s)
      {
-         var s1=s.toseller();
+         var s1=s.toSeller();
          _context.seller.Add(s1);
          await _context.SaveChangesAsync();
          return CreatedAtAction(nameof(GetSeller),new {id=s1.id},s1);
      }
+
      [HttpPut]
      public async Task<IActionResult> Updateseller(SellerDTO s)
      {

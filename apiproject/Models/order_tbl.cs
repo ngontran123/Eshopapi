@@ -16,7 +16,7 @@ namespace Models
         public string shippingAddress{get;set;}
         public decimal totalPrice {get;set;}
         public string status {get;set;}
-        public IEnumerable<order_item> orderitem1{get;set;}
+        public IEnumerable<order_item> orderItems{get;set;}
         public int customerId{get;set;}
     }
 }
